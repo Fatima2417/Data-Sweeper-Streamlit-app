@@ -9,7 +9,7 @@ st.set_page_config(page_title="Data Sweeper", layout="wide")
 st.title("Data Sweeper")
 st.write("Upload your CSV or Excel files for data cleaning, interactive visualization, and conversion.")
 
-# Here is a file uploader (CSV, Excel)
+# Here is a file uploader (CSV and Excel)
 uploaded_files = st.file_uploader("Upload your (CSV or Excel) files", type=["csv", "xlsx", "xls"], accept_multiple_files=True)
 
 if uploaded_files:
@@ -30,7 +30,7 @@ if uploaded_files:
         with st.expander("Original Data Preview"):
             st.dataframe(df.head())
 
-        # Sidebar form for Data Cleaning Options for better interfacee 
+        # Sidebar for Data Cleeaning Options for better interface 
         with st.sidebar.form(key=f'cleaning_options_{file.name}'):
             st.header("Data Cleaning Options")
             remove_duplicates = st.checkbox("Remove duplicates", value=False)
@@ -39,7 +39,8 @@ if uploaded_files:
 
             submit_filters = st.form_submit_button("Apply Cleaning Options")
 
-        # Hsection of apply data cleaning options
+        # section of apply data cleaning options
+        
         if submit_filters:
             if remove_duplicates:
                 df = df.drop_duplicates()
@@ -75,6 +76,7 @@ if uploaded_files:
 
             st.plotly_chart(fig, use_container_width=True, key=f"plot_{file.name}")
 
+        
         else:
             st.info("No numeric columns available for visualization.")
 
@@ -88,6 +90,7 @@ if uploaded_files:
                 df.to_csv(buffer, index=False)
                 output_filename = file.name.replace(file_ext, ".csv")
                 mime_type = "text/csv"
+                
             elif conversion_type == "Excel":
                 with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
                     df.to_excel(writer, index=False)
